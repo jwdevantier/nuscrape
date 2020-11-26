@@ -10,6 +10,7 @@ fastapi = "^0.61.2"
 aiohttp = {extras = ["speedups"], version = "^3.7.3"}
 pydantic = "^1.7.2"
 aiofiles = "^0.6.0"
+uvicorn = "^0.12.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
