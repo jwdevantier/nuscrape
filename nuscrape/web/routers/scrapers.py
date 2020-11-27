@@ -5,7 +5,4 @@ router = APIRouter()
 
 @router.get("/")
 async def index():
-    return [
-        "scraper1",
-        "scraper2"
-    ]
+    return ["scraper1", "scraper2"]

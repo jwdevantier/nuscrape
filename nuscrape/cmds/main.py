@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from nuscrape.web.init import app
+
 # app = FastAPI()
 #
 # @app.get("/")

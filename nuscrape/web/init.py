@@ -19,5 +19,6 @@ async def on_startup():
 async def on_shutdown():
     log.info("server shutting down...")
 
+
 app.on_event("startup")(on_startup)
 app.on_event("shutdown")(on_shutdown)

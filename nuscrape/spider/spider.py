@@ -79,8 +79,7 @@ class Request(BaseModel):
 
 class Spider(ABC):
     def shutdown(self) -> None:
-        """ Called when scraper is shut down.
-        """
+        """Called when scraper is shut down."""
         pass
 
     async def rq_delay_hook(self):
@@ -97,7 +96,7 @@ class Spider(ABC):
 
 
 class SpiderSchedulingPolicy(ABC):
-    @ abstractmethod
+    @abstractmethod
     def schedule_next(self, time_start: int, time_end: int) -> int:
         """Determine how many seconds to wait before (approximate) next run."""
         ...
@@ -105,6 +104,7 @@ class SpiderSchedulingPolicy(ABC):
 
 class FixedSchedule(SpiderSchedulingPolicy):
     """Fixed schedule - run every `seconds` seconds - regardless of runtime."""
+
     def __init__(self, seconds: int):
         self._seconds = seconds
 
@@ -135,12 +135,18 @@ class SpiderRunner(BaseModel):
         self.__task: t.Optional[asyncio.Task] = None
 
     async def __handle_request(self, rq: Request) -> t.AsyncIterator[t.Any]:
-        proxy_settings = self.proxy.dict() if self.proxy else {}  # TODO: cache somewhere
+        proxy_settings = (
+            self.proxy.dict() if self.proxy else {}
+        )  # TODO: cache somewhere
         async with aiohttp.ClientSession() as session:
             await self.spider.rq_delay_hook()
             async with getattr(session, rq.method.name.lower())(
-                    url=rq.url, headers=rq.headers, params=rq.params,
-                    body=rq.body, **proxy_settings) as rsp:
+                url=rq.url,
+                headers=rq.headers,
+                params=rq.params,
+                body=rq.body,
+                **proxy_settings
+            ) as rsp:
                 cb = rq.callback or self.spider.parse
                 async for result in cb(rsp, **rq.callback_kwargs):
                     yield result
